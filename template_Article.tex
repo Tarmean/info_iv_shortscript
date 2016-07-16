@@ -1,0 +1,127 @@
+\documentclass[9pt]{scrartcl}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+%opening
+\title{Informatik IV}
+\author{}
+
+\begin{document}
+
+
+
+
+\section{Grundbegriffe}
+\begin{itemize}
+	\item Ein alphabet ist eine endliche, nichtleere Menge $\Sigma$ von Buchstaben  (oder Symbolen).
+	\item Ein Wort über $\Sigma$ ist eine endliche Folge von Elementen aus $\sum$.
+	\item Die länge eines Wortes w (bezeichnet mit $|w|$) ist ide Anzahl der Symbole in w.
+	\item Das leere Wort ist das eindeutig bestimmte Wort der Länge 0 und wird mit dem grieschichen Buchstaben $\lambda$ bezeichnet.
+	\item Die Menge aller Wörter über $\Sigma$ bezeichnen wir mit $\Sigma^*$.
+	\item Eine formale Sprache über $\Sigma$ ist eine jede Teilmenge von $\Sigma^*$
+	\item Die leere Sprache ist die Sprache die keine Wörter enthält, und wird mit $\emptyset$ bezeichnet.
+	\item die Kardinalität einer Sprache L ist die Anzahl der Wörter von L und wirt mit $\|L\|$ bezeichnet.
+\end{itemize}
+\section{Operationen}
+\begin{itemize}
+	\item Vereinigung $\{1, 2\} \cup \{2, 3\} = \{1, 2, 3\}$.
+	\item Durschnitt $\{1, 2\} \cap \{2, 3\} = \{2\}$.
+	\item Differenz $A - B = \{x \in A\ und\ x \notin B\}$.
+	\item Komplement $\overline{A} = \{x \in \Sigma^*|x\notin B\}$.
+	\item Konkatenation von Wörtern
+	\begin{itemize}
+		\item Ist $u = v = \lambda$, so ist $uv = vu = \lambda$.
+		\item Ist $v = \Lambda$, so ist $uv = u$.
+		\item Ist $u = \lambda$ so ist $uv = v$.
+		\item Ist $u = u_1 u_2 \dots u_n und v = v_1 v_2 \dots v_m $ mit $u_i , v_i \in \Sigma$, so ist
+		$$uv = u_1 u_2 \dots u_n v_1 v_2 \dots \varepsilon_m.$$
+	\end{itemize}
+	\item Konkatenation von Sprachen:
+	$AB = \{ab|a\in A \ und\ b \in B\}.$
+	\item Iteration einer Sprache:
+	$A^0 = \{\lambda\},\ A^n = AA^{n-1},\ A^* = \bigcup_{n\geq 0}A^n$.
+	\item Spiegelbildoperation von Wort $sp(u)=u_n \dot u_2 u_1$.
+	\item Spiegelbildoperation von Sprache $sp(A)=\{sp(w)|w \in A\}$.
+	\item Teilwortrelation auf $\Sigma^*$: 
+	 $u \sqsupseteq v \leftrightarrow (\exists v_1, v_2 \in \Sigma^*)[v_1 u v_2 = v]$.
+	 \item Anfangswortrelation auf $\Sigma^*$:
+	 $ u \sqsupseteq_a v \leftrightarrow (\exists w \in \Sigma^*)[uw = v]$.
+\end{itemize}
+\section{Symbole}
+\begin{itemize}
+	\item $\Sigma$ ein Alphabet von Terminalsymbolen
+	\item $N$ eine Endliche Menge von Nichtterminalen, $\Sigma \cap N = \emptyset$
+	\item S Startsymbol, $S \in N$
+	\item P Produktionsregeln, $P \subseteq (N \cup \Sigma)^+ \times (N \cup \Sigma)^*$
+\end{itemize}
+\section{Grammatik}
+$G = (\Sigma, N, S, P)$
+\begin{itemize}
+	\item Typ-0: Ohne Einschränkungen.
+	\item Typ-1: $\forall p \rightarrow q \in P : |p| \leq |q|$ 
+	\item Typ-2: $\forall p \rightarrow q \in P : p \in N$ 
+	\item Typ-3: $\forall p \rightarrow q \in P : |p| \in N \ und\ q \in \Sigma \cup \Sigma N$ 
+\end{itemize}
+$REG \subseteq CF \subseteq CS \subseteq \mathcal{L}_0$
+\subsection{Sonderregelung für $\lambda$}
+Typ-i Grammatiken mit $i\in \{1, 2, 3\}$ sind nichtferkürzend, daher $\lambda \notin L(G)$. Daher folgende Sonderregelung:
+\begin{enumerate}
+	\item Die Regel $S \rightarrow \lambda$ ist als einzige verkürzende Regel für Grammatiken vom Typ 1, 2, 3 zugelassen.
+	\item Tritt die Regel $S \rightarrow \lambda$ auf, so darf $S$ auf keiner rechten Seite einer Regel vorkommen.
+\end{enumerate}
+Dies kann für alle Fälle mit folgender Umwandlung erreicht werden:
+\begin{enumerate}
+	\item In allen Regeln der Form $S \rightarrow u$ aus $P$ mit $u \in (N \cup \Sigma)^*$ wird jedes Vorkommen von $S$ in $u$ durch ein neues Nichtterminal $S'$ ersetzt.
+	\item Zusätzlich enthält $P'$ alle Regeln aus $P$, mit $S$ ersetzt durch $S'$.
+	\item Die Regel $S \rightarrow \lambda$ wird hinzugefügt.
+\end{enumerate}
+
+\section{Reguläre Sprachen}
+\subsection{DFA}
+\subsubsection{Definition}
+$M=(\Sigma, Z, \delta, z_o, F)$
+\begin{itemize}
+	\item $\Sigma$: Alphabet
+	\item $Z$: endliche Menge von Zustäanden mit $\Sigma \cap Z = \emptyset$
+	\item $\delta: Z \times \Sigma \rightarrow Z$ Überführungsfunktion
+	\item $z_0 \in Z$ Startzustand
+	\item $F \subseteq Z$ Endzustände
+\end{itemize}
+\subsubsection{Beispiel}
+	\begin{tabular}{|c||c|c|c|c|}
+		\hline
+		$\delta$ & $z_o$ & $z_1$ & $z_2$ & $z_3$\\
+		\hline \hline
+		$0$ & $z_1$ & $z_3$ & $z_2$ & $z_3$\\
+		\hline
+		$1$ & $z_3$ & $z_2$ & $z_2$ & $z_3$\\
+		\hline
+	\end{tabular}
+\subsubsection{$DFA \rightarrow Grammar$}
+	\begin{itemize}
+		\item $N = Z$,
+		\item $S = z_0$,
+		\item P:
+		\begin{itemize}
+			\item Gilt $\delta(z, a) = z'$, so ist $z \rightarrow az'$ in $P$.
+			\item Ist $z' \in F$, so ist zusätzlich $z \rightarrow a$ in $P$.
+			\item ist $\lambda \in A$ (d.h., $z_o \in F$), so ist auch $z_0 \rightarrow \lambda$ in $P$, und die bisher konstruierte Grammatik wird gemäß der Sonderregel für $\lambda$ modifiziert.
+		\end{itemize}
+	\end{itemize}
+\subsection{NFA}
+$M=(\Sigma, Z, \delta, S, F)$
+\begin{itemize}
+	\item $\Sigma$: Alphabet
+	\item $Z$: endliche Menge von Zuständen mit $\Sigma \cap Z = \emptyset$
+	\item $\delta: Z \times \Sigma \rightarrow \mathcal{P}(Z)$: Überführungsfunktionen zur Potenzmenge von Z
+	\item $S \subseteq Z$: Menge der Startzustände
+	\item $F \subseteq Z$ Menge der Endzustände
+\end{itemize}
+\subsubsection{$NFA \rightarrow DFA$ (Rabin und Scott)}
+NFA $M = (\Sigma, Z, \delta, S, E)$ und DFA $M' = (\Sigma, \mathcal{P}(Z), \delta', z_0', F)$
+\begin{itemize}
+	\item zustandsmenge von $M'$: $\mathcal{P}(Z)$,
+	\item $\delta'(Z', a)= \cup_{z\inZ'}\delta(z, a)=\hat\delta(Z', a)$ für, all $Z' \subseteq Z$ und $a \in \Sigma$,
+	\item $z_o' = S$,
+	\item $F = \{Z' \subseteq Z | Z' \cap E \not \emptyset}$
+\end{itemize}
+\end{document}
