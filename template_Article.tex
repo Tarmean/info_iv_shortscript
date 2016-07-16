@@ -1,15 +1,16 @@
-\documentclass[9pt]{scrartcl}
+\documentclass[9pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
+\usepackage{mathtools}
 %opening
 \title{Informatik IV}
 \author{}
 
 \begin{document}
+\textheight220mm
+%\maketitle
 
-
-
-
+%\chapter{Basics}
 \section{Grundbegriffe}
 \begin{itemize}
 	\item Ein alphabet ist eine endliche, nichtleere Menge $\Sigma$ von Buchstaben  (oder Symbolen).
@@ -74,7 +75,6 @@ Dies kann für alle Fälle mit folgender Umwandlung erreicht werden:
 	\item Zusätzlich enthält $P'$ alle Regeln aus $P$, mit $S$ ersetzt durch $S'$.
 	\item Die Regel $S \rightarrow \lambda$ wird hinzugefügt.
 \end{enumerate}
-
 \section{Reguläre Sprachen}
 \subsection{DFA}
 \subsubsection{Definition}
@@ -120,8 +120,94 @@ $M=(\Sigma, Z, \delta, S, F)$
 NFA $M = (\Sigma, Z, \delta, S, E)$ und DFA $M' = (\Sigma, \mathcal{P}(Z), \delta', z_0', F)$
 \begin{itemize}
 	\item zustandsmenge von $M'$: $\mathcal{P}(Z)$,
-	\item $\delta'(Z', a)= \cup_{z\inZ'}\delta(z, a)=\hat\delta(Z', a)$ für, all $Z' \subseteq Z$ und $a \in \Sigma$,
+	\item $\delta'(Z', a)= \cup_{z\in Z'}\delta(z, a)=\hat\delta(Z', a)$ für, all $Z' \subseteq Z$ und $a \in \Sigma$,
 	\item $z_o' = S$,
-	\item $F = \{Z' \subseteq Z | Z' \cap E \not \emptyset}$
+	\item $F = \{Z' \subseteq Z | Z' \cap E \not \emptyset\}$
 \end{itemize}
+\subsection{$Grammatik \rightarrow NFA$}
+\begin{itemize}
+	\item $Z = N \cup \{X\}$, wobei $X \notin N \cup \Sigma$ ein neues Symbol ist,
+	\item
+	$$F =
+	 \begin{dcases}
+		\{S, X\} &\text{falls }S \rightarrow \lambda\text{ in }P\\
+		\{X\}&\text{falls }S \rightarrow \lambda\text{ nicht in }P,
+	\end{dcases} $$
+	\item $S' = \{S\}$ und
+	\item für alle $A \in N$ und $a \in \Sigma$ sei
+	$$\delta(A, a) = \left(\bigcup_{A\rightarrow aB \in P} \{B\} \right) \cup \bigcup_{A\rightarrow a \in P} \{X\}.$$
+\end{itemize}
+\subsection{Regex}
+\begin{itemize}
+	\item $\emptyset\ und\ \lambda\ sind\ regul\ddot{a}re\ Ausdr\ddot{u}cke$
+	\item $Jedes\ a \in \Sigma\ ist\ ein\ regul\ddot{a}rer\ Ausdruck.$
+	\item $Sind\ \alpha\ und\ \beta\ regul\ddot{a}re\ Ausdr\ddot{u}cke,\ so\ sind\ auch$
+	  	\begin{itemize}
+			\item $\alpha\beta$
+			\item $(\alpha + \beta)\ und$
+			\item $(\alpha)^*$
+		\end{itemize}
+		$regul\ddot{a}re Ausdr\ddot{u}cke$
+	\item $Nichts\ sonst\ ist\ ein\ regul\ddot{a}rer\ Ausdruck$
+\end{itemize}
+%TODO: REGEX -> NFA, DFA -> REGEX, pages 34-36
+\subsection{$NFA \rightarrow L(M)$ Gleichungssysteme}
+Bilde ein Gleichungssystem mit $n$ Variablen und $n$ Gleichungen:
+\begin{enumerate}
+	\item Jedes $z_i \in Z, 1 \leq i \leq n$ ist Variable auf der linken Seite einer Gleichung
+	\item Gilt $z_j \in \delta(z_i, a)$ für $z_i, z_j \in Z$ und $a \in \Sigma$, so ist $az_j$ Summand auf der rechten Seite der Gleichung ,,$z_i = \dots$''
+	\item Gilt $z_i \in F$, so ist $\emptyset^*$ Summand auf der rechten Seite der Gleichung ,,$z_i = \dots$''.
+\end{enumerate}
+Todo: Die $z_i$ werden als reguläre Sprachen interpretiert und gemäß Lemma 2.24 und Satz 2.226 ausgerechnet.
+Es gilt dann: $L(M) = \bigcup_{z_i \in S}z_i$ bzw. $L(;) = L(\alpha)$ für den regulären Ausdruck $\alpha = \Sigma_{z_i \in S}z_i$.
+\subsection{Pumping Lemma REG}
+Sei $L \in$ REG. Dann existiert eine (von $L$ abhängige) Zahl $n \geq 1$, so dass sich alle Wörter $x \in L$ mit $|x|\geq n$ zerlegen lassen in $x = uvw$ wobei gilt:
+\begin{enumerate}
+	\item $|uv| \leq n$,
+	\item $|v| \geq 1$,
+	\item $(\forall i \geq 0)[uv^iw \in L]$.
+\end{enumerate}
+\subsection{Mihill Nerode Minimalautomaten}
+\subsubsection{Mihill Nerode Relation}
+$xR_Ly$ zwichen $x$ und $y$ gild genau dann, wenn $(\forall z \in \Sigma^*)[xz\in L \leftrightarrow yz \in L]$.
+Dies induziert eine Zerlegung von $\Sigma^*$ in Äquivalenzklassen: $$[x] = \{y \in \Sigma^* | xR_Ly\}$$
+Die Anzahl der Äquivalenzklassen ist $\text{Index}(R_L) = \|\{[x]|x \in \Sigma^*\}\|$.
+$$L\in REG \leftrightarrow \text{Index}(R_L) < \infty$$
+\textbf{\underline{Algorithmus}}\\
+\textbf{Eingabe:} DFA $M = (\Sigma, Z, \delta, z_0, F)$.\\
+\textbf{Ausgabe:} Ein zu $M$ äquivalenter Minimalautomat\\
+\textbf{Schritte}:
+\begin{enumerate}
+	\item Entferne alle von $z_0$ aus nicht erreichbaren Zustände aus $Z$.
+	\item Erstelle eine Tabelle aller (ungeordnneten) Zustandspaare $\{z, z'\}$ on $M$ mit $z \neq z'$.
+	\item Markiere alle Paare $\{z, z'\}$ mit
+	$z\in F \leftrightarrow z' \notin F$.
+	\item Seit $\{z, z'\}$ ein unmarkiertes paar. Prüfe für jedes $a \in \Sigma$, ob
+	$\{\delta(z, a), \delta(z', a)\}$
+	bereits markiert ist. Ist mindestens ein Test erfolgreich, so markiere auch $\{z, z'\}$.
+	\item Wiederhole Schritt 4, bis keine Änderung mehr eintritt.
+	\item Bilde maximale Mengen paarweise nicht disjunkter unmarkierter Zustandspaare und verschmelze jeweils alle Zustände einer Menge zu einem neuen Zustand.
+\end{enumerate}
+\subsection{Abschlusseigenschaften Definitionen}
+\begin{enumerate}
+	\item Vereinigung, falls $(\forall A, B \subseteq \Sigma^*)[(A \in \mathcal{C} \wedge B \in \mathcal{ C}) \implies A \cup B \in \mathcal{C}]$;
+	\item Komplement, falls $(\forall A \subseteq \Sigma^*)[A \in \mathcal{C} \implies \overline{A}\in\mathcal{C}]$;
+	\item Schnitt, falls $(\forall A, B \subseteq \Sigma^*)[(A \in \mathcal{C} \wedge B \in \mathcal{C}) \implies A \cap B \in \mathcal{C}]$;
+	\item Differenz, falls $(\forall A, B \subseteq \Sigma^*)[(A \in \mathcal{C} \wedge B \in C) \implies A \cap B \in \mathcal{C}]$;
+	\item Konkatenation, falls $(\forall A, B \subseteq \Sigma^*)[(A \in \mathcal{C} \wedge B \in \mathcal{C})\implies AB \in \mathcal{C}]$;
+	\item Iteration (Kleene-Hülle), falls $(\forall A \subseteq \Sigma^*)[A\in\mathcal{C}\implies A^*\in\mathcal{C}]$;
+	\item Spiegelung, falls $(\forall A\subseteq \Sigma^*)[A\in\mathcal{C}\implies sp(A)\in\mathcal{C}]$;
+\end{enumerate}
+\subsection{Characterisierung}
+% TODO: REMOVE subsection
+\begin{enumerate}
+	\item Es gibt eine rechtslineare Grammatik $G$ mit $L(G) = L$.
+	\item Es gbt eine linklineare Grammatik $G$ mit $L(G)=L$.
+	\item Es gibt einen DFA $M$ mit $L(M)=L$.
+	\item Es gibt einen NFA $M$ mit $L(M)=L$.
+	\item Es gibt einen regulären Ausdruck $\alpha$ mit $L(\alpha)=L$.
+	\item Für die Myhill-Nerode-Relation $R_L$ gilt: $\text{Index}(R_L)<\infty$.
+\end{enumerate}
+\section{Kontextfreie Sprachen}
+bla
 \end{document}
