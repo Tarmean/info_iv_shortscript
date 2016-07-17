@@ -449,6 +449,63 @@ $$\vdots$$$$\vdots$$
 	\begin{tabular}{|c||c|}
 		\hline
 	     Typ 3 & \specialcell[t]{reguläre Grammatik\\ deterministhischer endlicher Automat(DFA)\\ nichtdeterministischer endlicher Automat (NFA) \\ regulärer Ausdruck (REG)}\\
+			\hline
+		\specialcell[t]{deterministisch} & \specialcell[t]{LR(1)-Grammatik\\deterministischer Kellerautomat (DPDA)}\\
+			\hline
+		Typ 2 & \specialcell[t]{kontextfreie Grammatik\\ Kellerautomat (PDA)}\\
+			\hline
+		Typ 1 & \specialcell[t]{kontextsensitive Grammatik \\ linear beschränkter Automat (LBA)} \\
+			\hline
+		Typ 0 & \specialcell[t]{Typ-0-Grammatik \\ Turingmaschine (NTM bzw. DTM)}\\
+		\hline
+	\end{tabular}
+\end{table}
+\begin{table}
+    \begin{tabular}{|c|c|c|}
+    	\hline
+    	Deterministischer Automat & Nichtdeterministischer Automat & äquivalent?\\
+    	\hline\hline
+    	DFA & NFA & ja\\
+    	\hline
+    	DPDA & PDA & nein\\
+    	\hline
+    	DLBA & LBA & ?\\
+    	\hline
+    	DTM & NTM & ja\\
+    	\hline
+    \end{tabular}
+\end{table}
+\begin{table}
+	\begin{tabular}{|c|c|c|c|c|c|}
+		&Typ 3& det.kf.&Typ2 & Typ 1 & Typ 0\\
+		\hline\hline
+		Schnitt & ja & nein & nein & ja & ja\\
+		\hline
+		Vereinigung & ja & nein & ja & ja & ja\\
+		\hline
+		Komplement & ja & ja & nein & ja & nein\\
+		\hline
+		Konkatenation & ja & nein & ja & ja & ja\\
+		\hline
+		Iteration & ja & nein & ja & ja & ja\\
+		\hline
+		Spiegelung & ja & nein & ja & ja & ja\\
+		\hline
+	\end{tabular}
+\end{table}
+Wortproblem:
+$$\text{Wort}_i = \{(G, X)|G \text{ist Typ-i-Grammatik und }x \in L(G)\}$$
+\begin{table}
+	\begin{tabular}{|l|l|}
+		Typ 3 (DFA gegeben) & lineare Komplexität\\
+		\hline
+		det. kf. & lineare Komplexität\\
+		\hline
+		Typ 2 (CNF gegeben) & Komplexität $\mathcal{O}(n^3)$ (CYK-Algorithmus\\
+		\hline
+		Typ 1 & exponentielle Komplexität\\
+		\hline
+		Typ 0 & unentscheidbar (d.h. algorithmisch nicht lösbar)\\
 		\hline
 	\end{tabular}
 \end{table}
