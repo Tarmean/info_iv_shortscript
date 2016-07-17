@@ -1,0 +1,164 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{Für} \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{1} \PYG{o}{...} \PYG{n}{n}
+\PYG{n}{Für} \PYG{n}{jede} \PYG{n}{Produktion}
+
+
+
+\PYG{p}{(}
+\PYG{n}{l}
+\PYG{err}{→}
+\PYG{n}{r}
+\PYG{p}{)}
+\PYG{err}{∈}
+\PYG{n}{P}
+
+
+\PYG{p}{\PYGZob{}}\PYGZbs{}\PYG{n}{displaystyle} \PYG{p}{(}\PYG{n}{l}\PYGZbs{}\PYG{n}{rightarrow} \PYG{n}{r}\PYG{p}{)}\PYGZbs{}\PYG{o+ow}{in} \PYG{n}{P}\PYG{p}{\PYGZcb{}}
+
+\PYG{p}{(}\PYG{n}{l}\PYGZbs{}\PYG{n}{rightarrow} \PYG{n}{r}\PYG{p}{)}\PYGZbs{}\PYG{o+ow}{in} \PYG{n}{P}
+\PYG{n}{Falls} \PYG{n}{r} \PYG{o}{=}
+
+
+
+
+\PYG{n}{w}
+
+\PYG{n}{i}
+
+
+
+
+\PYG{p}{\PYGZob{}}\PYGZbs{}\PYG{n}{displaystyle} \PYG{n}{w\PYGZus{}}\PYG{p}{\PYGZob{}}\PYG{n}{i}\PYG{p}{\PYGZcb{}\PYGZcb{}}
+
+\PYG{n}{w\PYGZus{}}\PYG{p}{\PYGZob{}}\PYG{n}{i}\PYG{p}{\PYGZcb{}}
+\PYG{n}{Setze}
+
+
+
+
+\PYG{n}{V}
+
+\PYG{n}{i}
+\PYG{p}{,}
+\PYG{l+m+mi}{1}
+
+
+\PYG{p}{:}\PYG{o}{=}
+
+\PYG{n}{V}
+
+\PYG{n}{i}
+\PYG{p}{,}
+\PYG{l+m+mi}{1}
+
+
+\PYG{err}{∪}
+\PYG{p}{\PYGZob{}}
+\PYG{n}{l}
+\PYG{p}{\PYGZcb{}}
+
+
+\PYG{p}{\PYGZob{}}\PYGZbs{}\PYG{n}{displaystyle} \PYG{n}{V\PYGZus{}}\PYG{p}{\PYGZob{}}\PYG{n}{i}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{\PYGZcb{}:}\PYG{o}{=}\PYG{n}{V\PYGZus{}}\PYG{p}{\PYGZob{}}\PYG{n}{i}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{\PYGZcb{}}\PYGZbs{}\PYG{n}{cup} \PYGZbs{}\PYG{p}{\PYGZob{}}\PYG{n}{l}\PYGZbs{}\PYG{p}{\PYGZcb{}\PYGZcb{}}
+
+\PYG{n}{V\PYGZus{}}\PYG{p}{\PYGZob{}\PYGZob{}}\PYG{n}{i}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{\PYGZcb{}\PYGZcb{}:}\PYG{o}{=}\PYG{n}{V\PYGZus{}}\PYG{p}{\PYGZob{}\PYGZob{}}\PYG{n}{i}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{\PYGZcb{}\PYGZcb{}}\PYGZbs{}\PYG{n}{cup} \PYGZbs{}\PYG{p}{\PYGZob{}}\PYG{n}{l}\PYGZbs{}\PYG{p}{\PYGZcb{}}
+\PYG{n}{Für} \PYG{n}{j} \PYG{o}{=} \PYG{l+m+mi}{2} \PYG{o}{...} \PYG{n}{n}
+\PYG{n}{Für} \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{1} \PYG{o}{...} \PYG{n}{n} \PYG{o}{\PYGZhy{}} \PYG{n}{j} \PYG{o}{+} \PYG{l+m+mi}{1}
+\PYG{n}{Für} \PYG{n}{k} \PYG{o}{=} \PYG{l+m+mi}{1} \PYG{o}{...} \PYG{n}{j} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}
+\PYG{n}{Setze}
+
+
+
+
+\PYG{n}{V}
+
+\PYG{n}{i}
+\PYG{p}{,}
+\PYG{n}{j}
+
+
+\PYG{p}{:}\PYG{o}{=}
+
+\PYG{n}{V}
+
+\PYG{n}{i}
+\PYG{p}{,}
+\PYG{n}{j}
+
+
+\PYG{err}{∪}
+\PYG{p}{\PYGZob{}}
+\PYG{n}{l}
+
+
+\PYG{o}{|}
+
+
+\PYG{err}{∃}
+\PYG{n}{B}
+\PYG{p}{,}
+\PYG{n}{C}
+\PYG{err}{∈}
+\PYG{n}{N}
+\PYG{p}{(}
+\PYG{p}{(}
+\PYG{n}{l}
+\PYG{err}{→}
+\PYG{n}{B}
+\PYG{n}{C}
+\PYG{p}{)}
+\PYG{err}{∈}
+\PYG{n}{P}
+\PYG{err}{∧}
+\PYG{n}{B}
+\PYG{err}{∈}
+
+\PYG{n}{V}
+
+\PYG{n}{i}
+\PYG{p}{,}
+\PYG{n}{k}
+
+
+\PYG{err}{∧}
+\PYG{n}{C}
+\PYG{err}{∈}
+
+\PYG{n}{V}
+
+\PYG{n}{i}
+\PYG{o}{+}
+\PYG{n}{k}
+\PYG{p}{,}
+\PYG{n}{j}
+\PYG{err}{−}
+\PYG{n}{k}
+
+
+\PYG{p}{)}
+\PYG{p}{\PYGZcb{}}
+
+
+\PYG{p}{\PYGZob{}}\PYGZbs{}\PYG{n}{displaystyle} \PYG{n}{V\PYGZus{}}\PYG{p}{\PYGZob{}}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{\PYGZcb{}:}\PYG{o}{=}\PYG{n}{V\PYGZus{}}\PYG{p}{\PYGZob{}}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{\PYGZcb{}}\PYGZbs{}\PYG{n}{cup} \PYGZbs{}\PYG{p}{\PYGZob{}}\PYG{n}{l}\PYGZbs{}\PYG{p}{,}\PYG{o}{|}\PYGZbs{}\PYG{p}{,}\PYGZbs{}\PYG{n}{exists} \PYG{n}{B}\PYG{p}{,}\PYG{n}{C}\PYGZbs{}\PYG{o+ow}{in} \PYG{n}{N}\PYG{p}{((}\PYG{n}{l}\PYGZbs{}\PYG{n}{rightarrow} \PYG{n}{BC}\PYG{p}{)}\PYGZbs{}\PYG{o+ow}{in} \PYG{n}{P}\PYGZbs{}\PYG{n}{land} \PYG{n}{B}\PYGZbs{}\PYG{o+ow}{in} \PYG{n}{V\PYGZus{}}\PYG{p}{\PYGZob{}}\PYG{n}{i}\PYG{p}{,}\PYG{n}{k}\PYG{p}{\PYGZcb{}}\PYGZbs{}\PYG{n}{land} \PYG{n}{C}\PYGZbs{}\PYG{o+ow}{in} \PYG{n}{V\PYGZus{}}\PYG{p}{\PYGZob{}}\PYG{n}{i}\PYG{o}{+}\PYG{n}{k}\PYG{p}{,}\PYG{n}{j}\PYG{o}{\PYGZhy{}}\PYG{n}{k}\PYG{p}{\PYGZcb{})}\PYGZbs{}\PYG{p}{\PYGZcb{}\PYGZcb{}}
+
+\PYG{n}{V\PYGZus{}}\PYG{p}{\PYGZob{}\PYGZob{}}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{\PYGZcb{}\PYGZcb{}:}\PYG{o}{=}\PYG{n}{V\PYGZus{}}\PYG{p}{\PYGZob{}\PYGZob{}}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{\PYGZcb{}\PYGZcb{}}\PYGZbs{}\PYG{n}{cup} \PYGZbs{}\PYG{p}{\PYGZob{}}\PYG{n}{l}\PYGZbs{}\PYG{p}{,}\PYG{o}{|}\PYGZbs{}\PYG{p}{,}\PYGZbs{}\PYG{n}{exists} \PYG{n}{B}\PYG{p}{,}\PYG{n}{C}\PYGZbs{}\PYG{o+ow}{in} \PYG{n}{N}\PYG{p}{((}\PYG{n}{l}\PYGZbs{}\PYG{n}{rightarrow} \PYG{n}{BC}\PYG{p}{)}\PYGZbs{}\PYG{o+ow}{in} \PYG{n}{P}\PYGZbs{}\PYG{n}{land} \PYG{n}{B}\PYGZbs{}\PYG{o+ow}{in} \PYG{n}{V\PYGZus{}}\PYG{p}{\PYGZob{}\PYGZob{}}\PYG{n}{i}\PYG{p}{,}\PYG{n}{k}\PYG{p}{\PYGZcb{}\PYGZcb{}}\PYGZbs{}\PYG{n}{land} \PYG{n}{C}\PYGZbs{}\PYG{o+ow}{in} \PYG{n}{V\PYGZus{}}\PYG{p}{\PYGZob{}\PYGZob{}}\PYG{n}{i}\PYG{o}{+}\PYG{n}{k}\PYG{p}{,}\PYG{n}{j}\PYG{o}{\PYGZhy{}}\PYG{n}{k}\PYG{p}{\PYGZcb{}\PYGZcb{})}\PYGZbs{}\PYG{p}{\PYGZcb{}}
+\PYG{n}{Falls}
+
+
+
+\PYG{n}{S}
+\PYG{err}{∈}
+
+\PYG{n}{V}
+
+\PYG{l+m+mi}{1}
+\PYG{p}{,}
+\PYG{n}{n}
+
+
+
+
+\PYG{p}{\PYGZob{}}\PYGZbs{}\PYG{n}{displaystyle} \PYG{n}{S}\PYGZbs{}\PYG{o+ow}{in} \PYG{n}{V\PYGZus{}}\PYG{p}{\PYGZob{}}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{n}\PYG{p}{\PYGZcb{}\PYGZcb{}}
+
+\PYG{n}{S}\PYGZbs{}\PYG{o+ow}{in} \PYG{n}{V\PYGZus{}}\PYG{p}{\PYGZob{}\PYGZob{}}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{n}\PYG{p}{\PYGZcb{}\PYGZcb{},} \PYG{n}{stoppe} \PYG{n}{und} \PYG{n}{gib} \PYG{l+s+s2}{\PYGZdq{}w wird von G erzeugt\PYGZdq{}} \PYG{n}{aus}
+\PYG{n}{Stoppe} \PYG{n}{und} \PYG{n}{gib} \PYG{l+s+s2}{\PYGZdq{}w wird nicht von G erzeugt\PYGZdq{}} \PYG{n}{aus}
+\end{Verbatim}

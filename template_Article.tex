@@ -1,31 +1,41 @@
 \documentclass[9pt]{article}
+%encoding
+%--------------------------------------
 \usepackage[utf8]{inputenc}
-\usepackage{amsmath}
+\usepackage[T1]{fontenc}
+%--------------------------------------
+ \usepackage{listings} \lstset{numbers=left, numberstyle=\tiny, numbersep=5pt} \lstset{language=Python} 
+%Hyphenation rules
+%--------------------------------------
+\usepackage{hyphenat}
+\hyphenation{Mathe-matik wieder-gewinnen}
+%--------------------------------------
+\usepackage{amsmath, mathtools}
 \usepackage{mathtools}
 %opening
 \title{Informatik IV}
 \author{}
 
 \begin{document}
-\textheight220mm
+%\textheight220mm
 %\maketitle
 
 %\chapter{Basics}
 \section{Grundbegriffe}
 \begin{itemize}
-	\item Ein alphabet ist eine endliche, nichtleere Menge $\Sigma$ von Buchstaben  (oder Symbolen).
+	\item Ein Alphabet ist eine endliche, nichtleere Menge $\Sigma$ von Buchstaben  (oder Symbolen).
 	\item Ein Wort über $\Sigma$ ist eine endliche Folge von Elementen aus $\sum$.
-	\item Die länge eines Wortes w (bezeichnet mit $|w|$) ist ide Anzahl der Symbole in w.
-	\item Das leere Wort ist das eindeutig bestimmte Wort der Länge 0 und wird mit dem grieschichen Buchstaben $\lambda$ bezeichnet.
+	\item Die Länge eines Wortes w (bezeichnet mit $|w|$) ist die Anzahl der Symbole in w.
+	\item Das leere Wort ist das eindeutig bestimmte Wort der Länge 0 und wird mit dem griechischen Buchstaben $\lambda$ bezeichnet.
 	\item Die Menge aller Wörter über $\Sigma$ bezeichnen wir mit $\Sigma^*$.
 	\item Eine formale Sprache über $\Sigma$ ist eine jede Teilmenge von $\Sigma^*$
 	\item Die leere Sprache ist die Sprache die keine Wörter enthält, und wird mit $\emptyset$ bezeichnet.
-	\item die Kardinalität einer Sprache L ist die Anzahl der Wörter von L und wirt mit $\|L\|$ bezeichnet.
+	\item die Kardinalität einer Sprache L ist die Anzahl der Wörter von L und wird mit $\|L\|$ bezeichnet.
 \end{itemize}
 \section{Operationen}
 \begin{itemize}
 	\item Vereinigung $\{1, 2\} \cup \{2, 3\} = \{1, 2, 3\}$.
-	\item Durschnitt $\{1, 2\} \cap \{2, 3\} = \{2\}$.
+	\item Durchschnitt $\{1, 2\} \cap \{2, 3\} = \{2\}$.
 	\item Differenz $A - B = \{x \in A\ und\ x \notin B\}$.
 	\item Komplement $\overline{A} = \{x \in \Sigma^*|x\notin B\}$.
 	\item Konkatenation von Wörtern
@@ -64,7 +74,7 @@ $G = (\Sigma, N, S, P)$
 \end{itemize}
 $REG \subseteq CF \subseteq CS \subseteq \mathcal{L}_0$
 \subsection{Sonderregelung für $\lambda$}
-Typ-i Grammatiken mit $i\in \{1, 2, 3\}$ sind nichtferkürzend, daher $\lambda \notin L(G)$. Daher folgende Sonderregelung:
+Typ-i Grammatiken mit $i\in \{1, 2, 3\}$ sind nichtverkürzend, daher $\lambda \notin L(G)$. Daher folgende Sonderregelung:
 \begin{enumerate}
 	\item Die Regel $S \rightarrow \lambda$ ist als einzige verkürzende Regel für Grammatiken vom Typ 1, 2, 3 zugelassen.
 	\item Tritt die Regel $S \rightarrow \lambda$ auf, so darf $S$ auf keiner rechten Seite einer Regel vorkommen.
@@ -81,7 +91,7 @@ Dies kann für alle Fälle mit folgender Umwandlung erreicht werden:
 $M=(\Sigma, Z, \delta, z_o, F)$
 \begin{itemize}
 	\item $\Sigma$: Alphabet
-	\item $Z$: endliche Menge von Zustäanden mit $\Sigma \cap Z = \emptyset$
+	\item $Z$: endliche Menge von Zuständen mit $\Sigma \cap Z = \emptyset$
 	\item $\delta: Z \times \Sigma \rightarrow Z$ Überführungsfunktion
 	\item $z_0 \in Z$ Startzustand
 	\item $F \subseteq Z$ Endzustände
@@ -119,7 +129,7 @@ $M=(\Sigma, Z, \delta, S, F)$
 \subsubsection{$NFA \rightarrow DFA$ (Rabin und Scott)}
 NFA $M = (\Sigma, Z, \delta, S, E)$ und DFA $M' = (\Sigma, \mathcal{P}(Z), \delta', z_0', F)$
 \begin{itemize}
-	\item zustandsmenge von $M'$: $\mathcal{P}(Z)$,
+	\item Zustandsmenge von $M'$: $\mathcal{P}(Z)$,
 	\item $\delta'(Z', a)= \cup_{z\in Z'}\delta(z, a)=\hat\delta(Z', a)$ für, all $Z' \subseteq Z$ und $a \in \Sigma$,
 	\item $z_o' = S$,
 	\item $F = \{Z' \subseteq Z | Z' \cap E \not \emptyset\}$
@@ -179,7 +189,7 @@ $$L\in REG \leftrightarrow \text{Index}(R_L) < \infty$$
 \textbf{Schritte}:
 \begin{enumerate}
 	\item Entferne alle von $z_0$ aus nicht erreichbaren Zustände aus $Z$.
-	\item Erstelle eine Tabelle aller (ungeordnneten) Zustandspaare $\{z, z'\}$ on $M$ mit $z \neq z'$.
+	\item Erstelle eine Tabelle aller (ungeordneten) Zustandspaare $\{z, z'\}$ on $M$ mit $z \neq z'$.
 	\item Markiere alle Paare $\{z, z'\}$ mit
 	$z\in F \leftrightarrow z' \notin F$.
 	\item Seit $\{z, z'\}$ ein unmarkiertes paar. Prüfe für jedes $a \in \Sigma$, ob
@@ -202,12 +212,176 @@ $$L\in REG \leftrightarrow \text{Index}(R_L) < \infty$$
 % TODO: REMOVE subsection
 \begin{enumerate}
 	\item Es gibt eine rechtslineare Grammatik $G$ mit $L(G) = L$.
-	\item Es gbt eine linklineare Grammatik $G$ mit $L(G)=L$.
+	\item Es gibt eine linklineare Grammatik $G$ mit $L(G)=L$.
 	\item Es gibt einen DFA $M$ mit $L(M)=L$.
 	\item Es gibt einen NFA $M$ mit $L(M)=L$.
 	\item Es gibt einen regulären Ausdruck $\alpha$ mit $L(\alpha)=L$.
 	\item Für die Myhill-Nerode-Relation $R_L$ gilt: $\text{Index}(R_L)<\infty$.
 \end{enumerate}
 \section{Kontextfreie Sprachen}
-bla
+\subsection{Normalformen}
+Ausnahmeregel für das leere Wort muss nur für Typ-2 Grammatiken nicht genutzt werden. Eine $kfg G = (\Sigma, N, S, P)$ heißt $\lambda$-frei, falls in $P$ keine Regel $A \to \lambda$ mit $A \neq S$ auftritt. Diese Umwandlung ist immer möglich.
+\subsubsection{kfG $\to$ $\lambda$-frei}
+Wenn $\lambda \in L(G)$ wende Sonderregelung für $\lambda$ an.
+\begin{enumerate}
+	\item Bestimme die Menge $N_\lambda=\{A \in N | A \vdash^*_G \lambda\}$ sukzessive wie folgt:
+	\begin{enumerate}
+		\item Ist $A \to \lambda$ eine Regel in $P$, so ist $A \in N_\lambda$.
+		\item Ist $ A \to A_1 A_2 \dots A_k $ eine Regel in $P$ mit $k \geq 1$ und $A_i \in N_\lambda$ für alle $i$, $1 \leq i \leq k$, so ist $A \in N_\lambda$.
+	\end{enumerate}
+	\item Füge für jede Regel der Form
+	$$B \to uAv \text{ mit } B \in N, A\in N_\lambda \text{ und } uv \in (N \cup \Sigma)^+$$
+	zusätzlich die Regel $B \to uv$ zu $P$ hinzu.
+	\item entferne alle Regeln $A \to \lambda$ aus $P$.
+\end{enumerate}
+Schritt 2 muss auch für neu generierte Regeln iterativ angewendet werden. Dies ergibt die gesuchte $\lambda$-freie kfG $G'$ mit $L(G) =L(G')$.
+\subsubsection{Einfache Regeln entfernen}
+Regeln $A \to B$ heißen einfach falls $A, B \in N$
+\begin{enumerate}
+	\item Entferne alle Zyklen
+	$$B_1 \to B_2, B_2\to B_3, \dots , B_{k-1} \to B_k, B_k \to B_1 \text{ mit } B_i \in N$$
+	und ersetze all $B_i$ (in den verbleibenden Regelnd) durch ein neues Nichtterminal B.
+	\item Nummeriere die Nichtterminale als $\{A_1, A_2, \dots A_n\}$ so, dass aus $A_i \to A_j$ folgt: $i < j$.
+	\item Für $k = n - 1, n - 2, \dots , 1$ (RÜCKWÄRTS!) eliminiere die Regel $A_k \to A_l$ mit $k < l$ so: Sind die Regeln mit $A_l$ als linker Seite gegeben durch
+	$$A_l \to u_1 | u_2 | \dots | u_m,$$
+	so entferne $A_k \to A_l$ und füge die folgenden Regeln hinzu:
+	$$A_k \to u_1 | u_2 | \dots | u_m.$$
+\end{enumerate}
+\subsubsection{$\lambda$-frei ohne einfache Regeln $\to$ Chomsky-Normalform}
+\textbf{Bedingung}: Alle Regeln in P haben die form
+\begin{itemize}
+	\item $A \to BC$ mit $A, B, C \in N$;
+	\item $A \to a$ mit $A \in N$ und $a \in \Sigma$.
+\end{itemize}
+\textbf{Überführung:}
+\begin{enumerate}
+	\item Regeln $A \to a$ mit $A \in N$ und $a \in \Sigma$ sind $CNF$ und werden übernommen. Alle anderen Regeln sind von der Form: $A \to x$ mit $x \in (N \cup \Sigma)^*$ und $|x| \geq 2$.
+	\item Füge für jedes $a \in \Sigma$ ein neues Nichtterminal $B_a$ zu $N$ hinzu, ersetze jedes Vorkommen von $a \in \Sigma$ durch $B_a$ und füge zu $P$ die Regel $B_a \to a$ hinzu.
+	\item Nicht in $CNF$ Sind nun nur noch Regeln der Form
+	$$A \to B_1B_2\dots B_k\text{, wobei } k \geq 3 \text{ und jedes } B_i \text{ein Nichtterminal ist.}$$
+	Jede solche Regel wird ersetzt durch die Regeln:
+	
+	\begin{align*}
+	A &\to B_1 C_2,\\
+	C_2 &\to B_2 C_3,\\
+    &\vdotswithin{\to}\\
+	C_{k-2} &\to B_{k-2}C_{k-1},\\
+	C_{k-1} &\to B_{k-1}B_k,
+	\end{align*}
+	wobei $C_2, C_3, \dots , C_{k-1}$ neue Nichtterminale sind.
+\end{enumerate}
+Dies liefert die gesuchte Grammatik $G'$ in CNF mit $L(G) = L(G')$
+\subsubsection{Bemerkung CNF}
+\begin{itemize}
+	\item Ableitung von $w$ in $G$ in genau $2|w|-1$ Schritten.
+	\item Syntaxbaum ist ein Binärbaum.
+\end{itemize}
+\subsubsection{Greibach-Normalform}
+Zu jeder kfG mit $\lambda \notin L(G) gibt es eine kfG G' in GNF, so dass L(G) = L(G')$ und jede Regel in Folgender Form ist:
+$$A \to aB_1B_2 \dots B_k \text{ mit } k \geq 0 \text{ und } a \in \Sigma$$
+\subsubsection{Bemerkung GNF}
+Man unterscheidet bezüglich der Länge der rechten Seite der Produktion:
+\begin{itemize}
+	\item Jede kfG kann in eine äquivalente kfG in Greibach-Normalform transformiert werden, so dass für alle Regeln $A \to aB_1B_2 \dots B_k$ stets $k \leq 2$ gilt.
+	\item Für den Spezialfall $k \in \{0, 1\}$ erhalten wir gerade die Definition rechtslinearer Grammatiken.
+	\item Die Ableitung eines Wortes $w \in L(G), w \neq \lambda$ ist genau $|w|$ Schritte lang wenn G in GNF steht.
+\end{itemize}
+\subsection{Pumping-Lemma CF}
+Sei $L$ eine kontextfreie Sprache. Dann existiert eine (von L abhängige) Zahl $n \ge 1$, so dass sich alle Wörter $z \in L$ mit $|z| \ge n$ zerlegen lassen in $z = uvwxy$, wobei gilt:
+\begin{enumerate}
+	\item $|vx| \ge 1$.
+	\item $|vwx \le n$.
+	\item $(\forall i \ge 0)[uv^iwx^iy \in L]$.
+\end{enumerate}
+\subsection{Satz von Parikh}
+\subsubsection{Parikh Abbildung}
+$\Psi: LL \to \mathcal{N}^n$ ist definiert durch
+$$\Psi(w) = (|w|_a1, |w|_a2, \dots, |w|_an),$$
+wobei $|w|_a$ die Anzahl der Vorkommen des Zeichens $a$ in $w$ angibt. Für Sprachen:
+$\Psi: \mathcal{P}(\Sigma^*) \to \mathcal{P}(\mathcal{N}^n)$ ist definiert durch
+$$\Psi(L) = \{\Psi(w)|w \in L\}$$
+Eine Menge ist semilinear wenn sie aus linearen Mengen zusammengesetzt ist.
+\subsubsection{Parikh}
+Für jede kontextfreie Sprache $L$ in $\Psi(L)$ ist semilinear
+\subsubsection{Beispiel}
+$$L = \{x \in \{0, 1\}^i | x = 1^k \text{ mit } k \ge 0 \text{ oder }  x = 0^j1^{k^2} mit j \ge 1 \text{ und } k \ge 1\}$$
+über $\Sigma = \{0, ,1\}$. Die Menge
+$$ \Psi(L) = \{(i, j)|(i = 0\text{ und }j \ge 0) \text{ oder } (i \ge 1 \text{ und } j = k^2 \text{ und } k \ge 1)\}$$
+ist nicht semilinear und L somit nicht kontextfrei.
+\subsection{Abschlusseigenschaften CF}
+CF ist abgeschlossen unter Vereinigung, Konkatenation, Iteration, Spiegelung. CF ist abgeschlossen unter Schnitt mit REG.
+\subsection{CYK Algorithmus}
+Überprüfe ob Wort in Sprache. Zeile i, Spalte j der Tabelle ist
+ \begin{lstlisting}
+for k in 0..<j:
+  t[i, j].add nonterminals_with_rule_to_pair( (i, k), (i+k+1, -k))
+ \end{lstlisting}
+ Wenn S in der letzten Zeile steht is $w \in L(G)$.
+ \subsection{Kellerautomaten (PDA)}
+ \subsubsection{Definition}
+ $M = (\Sigma, \Gamma, Z, \delta, z_0, \#)$
+ \begin{itemize}
+ 	\item $\Sigma$: Eingabe-Alphabet
+ 	\item $\Gamma$: Kelleralphabet
+ 	\item Z: endliche Menge von Zuständen
+ 	\item $\delta: Z \times (\Sigma \cup \{\lambda\}) \times \Gamma \to \mathcal{P}_e(Z \times \Gamma^+)$ die Überführungsfunktion, $\mathcal{P}_e(Z \times \Gamma^+)$ ist die Menge aller endlichen Teilmengen von $Z \times \Gamma^+$
+ 	\item $z_0 \in Z$: Startzustand
+ 	\item $\# \in \Gamma$ das Bottom-Symbol im Keller
+ \end{itemize}
+ $\delta$-Übergänge $(z', B_1,B_2 \dots B_k)\in \delta(z, a, A)$ schreiben wir kurz auch $zaA \to z'B_1B_2\dots B_k$
+ \begin{itemize}
+ 	\item Akzeptiert wenn Keller leer
+ 	\item Schritte ohne Lesen eines Eingabesymbols  sind in der Form $z\lambda A \to z'B_1B_2 \dots B_k$ möglich.
+ 	\item Es ist nur ein Startzustand nötig
+ \end{itemize}
+ Sprache:
+ \begin{itemize}
+ 	\item  $\mathcal{k}_m = Z \times \Sigma^* \times \Gamma^*$ ist die Menge aller Konfigurationen von M
+ 	\item ist $k = (z, \alpha, \gamma)$ eine Konfiguration aus $\mathcal{k}_M$, so ist im aktuallen Takt der Rechnung von M:
+ 	\begin{itemize}
+ 		\item $z \in Z$ der aktuelle Zustand von M;
+ 		\item $alpha \in \Sigma^*$ der noch zu lesende Teil des Eingabeworts;
+ 		\item $\gamma \in \Gamma^*$ der aktuelle Kellerinhalt.
+ 	\end{itemize}
+ 	Für jedes Eingabewort $w \in \Sigma^*$ ist $(z_0, w, \#)$ die entsprechende Startkonfiguration von M.
+ 	\item Auf $\mathcal{k}_m$ definieren wir eine binäre Relation $\vdash_m \subseteq \mathcal{k}_M \times \mathcal{k}_M$ wie folgt:
+ 	\begin{itemize}
+ 		\item Für $k, k' \in \mathcal{k}_M$ gilt $k \vdash_m k'$ genau dann, wenn $k'$ aus $k$ durch eine Anwendung von $\delta$ hervorgeht.
+ 	\end{itemize}
+ 	\item $\vdash^*_M$ ist die reflexive und transitive Hülle von $\vdash_M$
+ 	\item Die vom PDA $M$ akzeptierte Sprache ist definiert durch
+ 	$$L(M) = \{w \in \Sigma^*|(z_0, w, \#)\vdash^*_M (z, \lambda, \lambda) \text{ für ein } z \in Z\}$$
+ 	$(z, \lambda, \lambda)$ ist dann eine Endkonfiguration für PDA M.
+ \end{itemize}
+ \subsubsection{Kontextfrei $\to$ PDA}
+ Von $G = (\Sigma, N, S, P)$ zu $M = (\Sigma, N\cup\Sigma, \{z\}, \delta, z, S)$:
+ \begin{enumerate}
+ 	\item Ist $A \to q$ eine Regel in $P$ mit $A \in N$ und $q \in (N \cup \Sigma)^+$, so sei $(z, q) \in \delta(z, \lambda, A)$.
+ 	\item Für jedes $a \in \Sigma$ sie $(z, \lambda), \in \delta(z, a, a)$.
+ \end{enumerate}
+\subsubsection{PDA $\to$ Kontextfrei}
+ Von $M = (\Sigma, \Gamma, Z, \delta, z_0, \#)$ zu $G = (\Sigma, \{S\} \cup Z \times \Gamma \times Z, S, P)$:\\
+ O.B.d.A Für alle $\delta$-Regeln der Form $zaA \to z'B_1B_2\dots B_k$ gelte $k \le 2$.
+ P besteht dann aus den folgenden Regeln:
+ \begin{enumerate}
+ 	\item $S \to (z_0, \#, z)$ für jedes $z \in Z$.
+ 	\item $(z, A, z') \to a$, falls $(z', \lambda) \ in \delta(z, a, A)$.
+ 	\item $(z, A, z') \to a(z_1, B, z')$ falls $(z_1), B) \in \delta(z, a, A)$.
+ 	\item $z, A, z') \to a(z_1, B, z_2)(z_2, C, z')$, falls $z_1, BC) \in \delta(z, a, A)$.
+ \end{enumerate}
+ Wobei $z, z', z_1, z_2 \in Z, A, B, C \in \Gamma$ und $a \in \Sigma \cup \{\lambda\}$.
+\section{Deterministiche Kontextfreie Sprache, DCF}
+$M = (\Sigma, \Gamma, Z, \delta, z_0, \#, F)$
+\begin{enumerate}
+	\item $M' = (\Sigma, \Gamma, Z, \delta, z_0, \#)$ ist PDA
+	\item $(\forall a \in \Sigma)(\forall A \in \Gamma)(\forall z \in Z)[\|\delta(z, a, A)\| + \|\delta(z, \lambda, A)\| \le 1]$;
+	\item $F \subseteq Z$ ist eine ausgezeichnete Teilmenge von Endzuständen (M akzeptiert per Endzustand, nicht per leerem Keller)
+\end{enumerate}
+Die akzeptierte Sprache ist
+$$L(M) = \{x \in \Sigma^*|(z_0, x, \#)\vdash^*_M (z, \lambda, \gamma) \text{ für ein } z \in F \text{ und } \gamma \in \Gamma^*\}$$
+Eine Sprache heißt Deterministisch kontextfrei wenn es einen deterministischen Kellerautomaten M gibit mit $A = L(M)$.
+\subsubsection{Abschlusseigenschaften DCF}
+DCF ist abgeschlossen unter Komplement
+% TODO: Lineare & Semilineare Mengen
+% LR und LL GRAMMATIKEN TODO
 \end{document}
