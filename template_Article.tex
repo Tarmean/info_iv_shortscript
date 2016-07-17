@@ -10,11 +10,14 @@
 \usepackage{hyphenat}
 \hyphenation{Mathe-matik wieder-gewinnen}
 %--------------------------------------
-\usepackage{amsmath, mathtools}
+\usepackage{amsmath, amssymb, mathtools}
 \usepackage{mathtools}
 %opening
 \title{Informatik IV}
 \author{}
+
+\newcommand{\specialcell}[2][r]{%
+    \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
 
 \begin{document}
 %\textheight220mm
@@ -382,6 +385,72 @@ $$L(M) = \{x \in \Sigma^*|(z_0, x, \#)\vdash^*_M (z, \lambda, \gamma) \text{ fü
 Eine Sprache heißt Deterministisch kontextfrei wenn es einen deterministischen Kellerautomaten M gibit mit $A = L(M)$.
 \subsubsection{Abschlusseigenschaften DCF}
 DCF ist abgeschlossen unter Komplement
-% TODO: Lineare & Semilineare Mengen
 % LR und LL GRAMMATIKEN TODO
+\section{$\mathcal{L}_0$ Sprachen (Turingmaschinen)}
+$M = (\Sigma, \Gamma, Z, \delta, z_0, \square, F)$\\
+Mit k Bändern:
+\begin{itemize}
+	\item $\Sigma$: Eingabe-Alphabet,
+	\item $\Gamma$: Arbeitsalphabet mit $\Sigma \subseteq \Gamma$,
+	\item $Z$: endliche Menge von Zuständen mit $Z \cap \Gamma = \emptyset$,
+	\item $\delta: Z \times \Gamma^k \to \mathcal{P}(Z \times \Gamma^K \times \{L, R, N\}^k)$: Überführungsfunktion,
+	\item $z_0 \in Z$: Startzustand,
+	\item $\square \in \Gamma - \Sigma$: ,,Blank''-Symbol
+	\item $F \subseteq Z$: Menge der Endzustände
+\end{itemize}
+Spezialfall der deterministischen Turingmaschine mit k Bändern mit k Bändern ergibt sich, wenn $\delta$ von $Z \times \Gamma^k$ nach $Z \times \Gamma^k \times \{L, R, N\}^k$ abbildet. Für $k = 1$ ergibt sich die 1-Band-Turingmaschine die mit TM abgekürzt wird. Jede Turingmaschine kann durch eine TM simuliert werden.
+Statt $(z', b, x)\in \delta(z, a)$ mit $z, z' \in Z, x \in \{L, R, N\}, a, b \in \Gamma$ schreiben wir kurz: $(z, a) \to (z', b, x)$, oder $za \to z'bx$
+% Semantik von Turingmaschinen TODO
+\subsection{Linear beschränkte Automaten (LBA)}
+\begin{enumerate}
+	\item Verdoppele das Eingabe-Alphabet $\Sigma$ mit $\hat{\Sigma} = \Sigma \cup \{\hat{a}|a \in \Sigma\}$
+	\item Repräsentiere die Eingabe $a_1a_2 \dots a_n \in \Sigma^+$ durch das Wort $a_1a_2 \dots a_{n-1}\hat{a_n}$ über $\hat{\Sigma}$
+		
+\end{enumerate}
+\begin{itemize}
+	\item Eine nichtdeterministische TM $M$ heißt linear beschränkter Automat (kurz LBA), fals für all Konfigurationen $\alpha z \beta$ und
+	\begin{itemize}
+		\item für alle Wörter $x = a_1a_2 \dots a_{n-1}a_-n \in \Sigma^+$ mit
+		$$z_0a_1a_2 \dots a_{n-1}\hat{a_n}\vdash^*_m \alpha z \beta$$
+		gilt: $|\alpha \beta| = n$, und
+		\item für $x = \lambda$ mit $z_0 \square \vdash^*_M \alpha z \beta$ gilt: $\alpha\beta = \square$
+	\end{itemize}
+	\item Die vom LBA $M$ akzeptierte Sprache ist definiert durch
+	$$L(M) = \left\{
+					a_1a_2 \dots a_{n-1}a_n \in \Sigma^* \middle|
+					\begin{split}
+					&z_0a_1a_2 \dots a_{n-1} \hat{a_n} \vdash^*_m \alpha z\beta\\
+					&\text{mit } z \in F \text{ und } \alpha, \beta \in \Gamma^*
+					\end{split}
+		   	\right\}$$
+\end{itemize}
+\subsubsection{CS $\to$ LBA}
+Von $G = (\Sigma, N, S, P)$ zu $M = (\Sigma, \Gamma, Z, \delta, z_0, \square, F)$
+\begin{enumerate}
+	\item Eingabe $x = a_1a_2 \dots a_n$.
+	\item Wähle nichtdeterministisch eine Regel $u \to v$ aus $P$ und suche eine beliebiges Vorkommen von $v$ in der aktuellen Bandinschrift von $M$.
+	\item Ersetzt $v$ durch $u$. Ist dabei $|u| < |v|$, so verschiebe entsprechend alle Symbole rechts der Lücke um diese zu schließen.
+	\item Ist die aktuelle Bandinschrift nur noch das Startsymbol $S$, so halte im Endzustand und akzeptiere; andernfalls gehe zu (2) und wiederhole.
+\end{enumerate}
+\subsubsection{LBA $\to$ CS}
+
+Von $M = (\Sigma, \Gamma, Z, \delta, z_0, \square, F)$ und $G= (\Sigma, \{S, A\} \cup \{\Delta \times\ \Sigma\}, S, P)$ mit
+$$\Delta = \Gamma \cup (Z \times \Gamma)$$
+$$\vdots$$$$\vdots$$
+%TODO
+\subsubsection{$\mathcal{L_0} \to$ TM}
+\begin{enumerate}
+	\item Eingabe $x = a_1a_2 \dots a_n$.
+	\item Wähle nichtdeterministisch eine Regel $u \to v$ aus $P$ und suche eine beliebiges Vorkommen von $v$ in der aktuellen Bandinschrift von $M$.
+	\item Ersetzt $v$ durch $u$. Ist dabei $|u| < |v|$, so verschiebe entsprechend alle Symbole rechts der Lücke um diese zu schließen.
+	\item Ist die aktuelle Bandinschrift nur noch das Startsymbol $S$, so halte im Endzustand und akzeptiere; andernfalls gehe zu (2) und wiederhole.
+\end{enumerate}
+\begin{table}[h]
+	\begin{tabular}{|c||c|}
+		\hline
+	     Typ 3 & \specialcell[t]{reguläre Grammatik\\ deterministhischer endlicher Automat(DFA)\\ nichtdeterministischer endlicher Automat (NFA) \\ regulärer Ausdruck (REG)}\\
+		\hline
+	\end{tabular}
+\end{table}
+
 \end{document}
