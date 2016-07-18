@@ -1,0 +1,568 @@
+\documentclass[9pt, a4paper]{article}
+%encoding
+%--------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+%--------------------------------------
+ \usepackage{listings} \lstset{numbers=left, numberstyle=\tiny, numbersep=5pt} \lstset{language=Python} 
+%Hyphenation rules
+%--------------------------------------
+\usepackage{hyphenat}
+\hyphenation{Mathe-matik wieder-gewinnen}
+%--------------------------------------
+\usepackage{amsmath, amssymb, mathtools}
+\usepackage{mathtools}
+%opening
+\title{Informatik IV}
+\author{}
+
+\newcommand{\specialcell}[2][r]{%
+    \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+
+\begin{document}
+\tableofcontents
+\newpage
+\textheight220mm
+%\maketitle
+\section{Algorithmen}
+\subsection{REG}
+\subsubsection{DFA $\to$ Grammar}
+	\begin{itemize}
+		\item $N = Z$,
+		\item $S = z_0$,
+		\item P:
+		\begin{itemize}
+			\item Gilt $\delta(z, a) = z'$, so ist $z \rightarrow az'$ in $P$.
+			\item Ist $z' \in F$, so ist zusätzlich $z \rightarrow a$ in $P$.
+			\item ist $\lambda \in A$ (d.h., $z_o \in F$), so ist auch $z_0 \rightarrow \lambda$ in $P$, und die bisher konstruierte Grammatik wird gemäß der Sonderregel für $\lambda$ modifiziert.
+		\end{itemize}
+	\end{itemize}
+
+\subsubsection{NFA $\to$ DFA (Rabin und Scott)}
+NFA $M = (\Sigma, Z, \delta, S, E)$ und DFA $M' = (\Sigma, \mathcal{P}(Z), \delta', z_0', F)$
+\begin{itemize}
+	\item Zustandsmenge von $M'$: $\mathcal{P}(Z)$,
+	\item $\delta'(Z', a)= \cup_{z\in Z'}\delta(z, a)=\hat\delta(Z', a)$ für, all $Z' \subseteq Z$ und $a \in \Sigma$,
+	\item $z_o' = S$,
+	\item $F = \{Z' \subseteq Z | Z' \cap E \not \emptyset\}$
+\end{itemize}
+
+\subsubsection{Grammatik $\to$ NFA}
+\begin{itemize}
+	\item $Z = N \cup \{X\}$, wobei $X \notin N \cup \Sigma$ ein neues Symbol ist,
+	\item
+	$F =
+	 \begin{dcases}
+		\{S, X\} &\text{falls }S \rightarrow \lambda\text{ in }P\\
+		\{X\}&\text{falls }S \rightarrow \lambda\text{ nicht in }P,
+	\end{dcases} $
+	\item $S' = \{S\}$ und
+	\item für alle $A \in N$ und $a \in \Sigma$ sei
+	$$\delta(A, a) = \left(\bigcup_{A\rightarrow aB \in P} \{B\} \right) \cup \bigcup_{A\rightarrow a \in P} \{X\}.$$
+\end{itemize}
+
+\subsubsection{NFA $\to$ L(M) Gleichungssysteme}
+Bilde ein Gleichungssystem mit $n$ Variablen und $n$ Gleichungen:
+\begin{enumerate}
+	\item Jedes $z_i \in Z, 1 \leq i \leq n$ ist Variable auf der linken Seite einer Gleichung
+	\item Gilt $z_j \in \delta(z_i, a)$ für $z_i, z_j \in Z$ und $a \in \Sigma$, so ist $az_j$ Summand auf der rechten Seite der Gleichung ,,$z_i = \dots$''
+	\item Gilt $z_i \in F$, so ist $\emptyset^*$ Summand auf der rechten Seite der Gleichung ,,$z_i = \dots$''.
+\end{enumerate}
+Die $z_i$ werden als reguläre Sprachen interpretiert und gemäß Lemma 2.24 und Satz 2.226 ausgerechnet.
+Es gilt dann: $L(M) = \bigcup_{z_i \in S}z_i$ bzw. $L(;) = L(\alpha)$ für den regulären Ausdruck $\alpha = \Sigma_{z_i \in S}z_i$.
+\subsubsection{Regex $\to$ NFA}
+Fange mit Nuclei an und verbinde einfache Machinen:
+\begin{itemize}
+    \item $a \to $ Einfacher Übergang
+    \item $a*b \to $ Einfacher übergang oder Schleife
+    \item $a? \to $ Einfacher Übergang und $\lambda$ oder $\lambda$
+\end{itemize}
+
+\subsubsection{Mihill Nerode Minimalautomaten}
+$xR_Ly$ zwichen $x$ und $y$ gild genau dann, wenn $(\forall z \in \Sigma^*)[xz\in L \leftrightarrow yz \in L]$.
+Dies induziert eine Zerlegung von $\Sigma^*$ in Äquivalenzklassen: $$[x] = \{y \in \Sigma^* | xR_Ly\}$$
+Die Anzahl der Äquivalenzklassen ist $\text{Index}(R_L) = \|\{[x]|x \in \Sigma^*\}\|$.
+$$L\in REG \leftrightarrow \text{Index}(R_L) < \infty$$
+Von DFA $M = (\Sigma, Z, \delta, z_0, F)$ zu $M$ äquivalenter Minimalautomat
+\begin{enumerate}
+	\item Entferne alle von $z_0$ aus nicht erreichbaren Zustände aus $Z$.
+	\item Erstelle eine Tabelle aller (ungeordneten) Zustandspaare $\{z, z'\}$ on $M$ mit $z \neq z'$.
+	\item Markiere alle Paare $\{z, z'\}$ mit
+	$z\in F \leftrightarrow z' \notin F$.
+	\item Seit $\{z, z'\}$ ein unmarkiertes paar. Prüfe für jedes $a \in \Sigma$, ob
+	$\{\delta(z, a), \delta(z', a)\}$
+	bereits markiert ist. Ist mindestens ein Test erfolgreich, so markiere auch $\{z, z'\}$.
+	\item Wiederhole Schritt 4, bis keine Änderung mehr eintritt.
+	\item Bilde maximale Mengen paarweise nicht disjunkter unmarkierter Zustandspaare und verschmelze jeweils alle Zustände einer Menge zu einem neuen Zustand.
+\end{enumerate}
+
+\subsection{CF}
+\subsubsection{CYK Algorithmus}
+Überprüfe ob Wort in CF Sprache. Zeile i, Spalte j der Tabelle ist
+ \begin{lstlisting}
+for k in 0..<j:
+  t[i, j].add nonterminals_with_rule_to_pair( (i, k), (i+k+1, -k))
+ \end{lstlisting}
+
+\subsubsection{Kontextfrei $\to$ PDA}
+ Von $G = (\Sigma, N, S, P)$ zu $M = (\Sigma, N\cup\Sigma, \{z\}, \delta, z, S)$:
+ \begin{enumerate}
+ 	\item Ist $A \to q$ eine Regel in $P$ mit $A \in N$ und $q \in (N \cup \Sigma)^+$, so sei $(z, q) \in \delta(z, \lambda, A)$.
+ 	\item Für jedes $a \in \Sigma$ sei $(z, \lambda), \in \delta(z, a, a)$.
+ \end{enumerate}
+
+\subsubsection{PDA $\to$ Kontextfrei}
+ Von $M = (\Sigma, \Gamma, Z, \delta, z_0, \#)$ zu $G = (\Sigma, \{S\} \cup Z \times \Gamma \times Z, S, P)$:\\
+ O.B.d.A Für alle $\delta$-Regeln der Form $zaA \to z'B_1B_2\dots B_k$ gelte $k \le 2$.
+ P besteht dann aus den folgenden Regeln:
+ \begin{enumerate}
+ 	\item $S \to (z_0, \#, z)$ für jedes $z \in Z$.
+ 	\item $(z, A, z') \to a$, falls $(z', \lambda) \ in \delta(z, a, A)$.
+ 	\item $(z, A, z') \to a(z_1, B, z')$ falls $(z_1), B) \in \delta(z, a, A)$.
+ 	\item $z, A, z') \to a(z_1, B, z_2)(z_2, C, z')$, falls $z_1, BC) \in \delta(z, a, A)$.
+ \end{enumerate}
+ Wobei $z, z', z_1, z_2 \in Z, A, B, C \in \Gamma$ und $a \in \Sigma \cup \{\lambda\}$.
+
+\subsection{Normalformen}
+Ausnahmeregel für das leere Wort muss nur für Typ-2 Grammatiken nicht genutzt werden. Eine $kfg G = (\Sigma, N, S, P)$ heißt $\lambda$-frei, falls in $P$ keine Regel $A \to \lambda$ mit $A \neq S$ auftritt. Diese Umwandlung ist immer möglich.
+\subsubsection{kfG $\to$ $\lambda$-frei}
+Wenn $\lambda \in L(G)$ wende Sonderregelung für $\lambda$ an.
+\begin{enumerate}
+	\item Bestimme die Menge $N_\lambda=\{A \in N | A \vdash^*_G \lambda\}$ sukzessive wie folgt:
+	\begin{enumerate}
+		\item Ist $A \to \lambda$ eine Regel in $P$, so ist $A \in N_\lambda$.
+		\item Ist $ A \to A_1 A_2 \dots A_k $ eine Regel in $P$ mit $k \geq 1$ und $A_i \in N_\lambda$ für alle $i$, $1 \leq i \leq k$, so ist $A \in N_\lambda$.
+	\end{enumerate}
+	\item Füge für jede Regel der Form
+	$$B \to uAv \text{ mit } B \in N, A\in N_\lambda \text{ und } uv \in (N \cup \Sigma)^+$$
+	zusätzlich die Regel $B \to uv$ zu $P$ hinzu.
+	\item entferne alle Regeln $A \to \lambda$ aus $P$.
+\end{enumerate}
+Schritt 2 muss auch für neu generierte Regeln iterativ angewendet werden. Dies ergibt die gesuchte $\lambda$-freie kfG $G'$ mit $L(G) =L(G')$.
+\subsubsection{Einfache Regeln entfernen}
+Regeln $A \to B$ heißen einfach falls $A, B \in N$
+\begin{enumerate}
+	\item Entferne alle Zyklen
+	$$B_1 \to B_2, B_2\to B_3, \dots , B_{k-1} \to B_k, B_k \to B_1 \text{ mit } B_i \in N$$
+	und ersetze all $B_i$ (in den verbleibenden Regelnd) durch ein neues Nichtterminal B.
+	\item Nummeriere die Nichtterminale als $\{A_1, A_2, \dots A_n\}$ so, dass aus $A_i \to A_j$ folgt: $i < j$.
+	\item Für $k = n - 1, n - 2, \dots , 1$ (RÜCKWÄRTS!) eliminiere die Regel $A_k \to A_l$ mit $k < l$ so: Sind die Regeln mit $A_l$ als linker Seite gegeben durch
+	$$A_l \to u_1 | u_2 | \dots | u_m,$$
+	so entferne $A_k \to A_l$ und füge die folgenden Regeln hinzu:
+	$$A_k \to u_1 | u_2 | \dots | u_m.$$
+\end{enumerate}
+\subsubsection{$\lambda$-frei ohne einfache Regeln $\to$ Chomsky-Normalform}
+\textbf{Bedingung}: Alle Regeln in P haben die form
+\begin{itemize}
+	\item $A \to BC$ mit $A, B, C \in N$;
+	\item $A \to a$ mit $A \in N$ und $a \in \Sigma$.
+\end{itemize}
+\textbf{Überführung:}
+\begin{enumerate}
+	\item Regeln $A \to a$ mit $A \in N$ und $a \in \Sigma$ sind $CNF$ und werden übernommen. Alle anderen Regeln sind von der Form: $A \to x$ mit $x \in (N \cup \Sigma)^*$ und $|x| \geq 2$.
+	\item Füge für jedes $a \in \Sigma$ ein neues Nichtterminal $B_a$ zu $N$ hinzu, ersetze jedes Vorkommen von $a \in \Sigma$ durch $B_a$ und füge zu $P$ die Regel $B_a \to a$ hinzu.
+	\item Nicht in $CNF$ Sind nun nur noch Regeln der Form
+	$$A \to B_1B_2\dots B_k\text{, wobei } k \geq 3 \text{ und jedes } B_i \text{ein Nichtterminal ist.}$$
+	Jede solche Regel wird ersetzt durch die Regeln:
+	
+	\begin{align*}
+	A &\to B_1 C_2,\\
+	C_2 &\to B_2 C_3,\\
+    &\vdotswithin{\to}\\
+	C_{k-2} &\to B_{k-2}C_{k-1},\\
+	C_{k-1} &\to B_{k-1}B_k,
+	\end{align*}
+	wobei $C_2, C_3, \dots , C_{k-1}$ neue Nichtterminale sind.
+\end{enumerate}
+Dies liefert die gesuchte Grammatik $G'$ in CNF mit $L(G) = L(G')$
+\subsubsection{Bemerkung CNF}
+\begin{itemize}
+	\item Ableitung von $w$ in $G$ in genau $2|w|-1$ Schritten.
+	\item Syntaxbaum ist ein Binärbaum.
+\end{itemize}
+
+\subsubsection{Greibach-Normalform}
+Zu jeder kfG mit $\lambda \notin L(G)$ gibt es eine kfG $G'$ in GNF, so dass $L(G) = L(G')$ und jede Regel in Folgender Form ist:
+$$A \to aB_1B_2 \dots B_k \text{ mit } k \geq 0 \text{ und } a \in \Sigma$$
+\subsubsection{Bemerkung GNF}
+Man unterscheidet bezüglich der Länge der rechten Seite der Produktion:
+\begin{itemize}
+	\item Jede kfG kann in eine äquivalente kfG in Greibach-Normalform transformiert werden, so dass für alle Regeln $A \to aB_1B_2 \dots B_k$ stets $k \leq 2$ gilt.
+	\item Für den Spezialfall $k \in \{0, 1\}$ erhalten wir gerade die Definition rechtslinearer Grammatiken.
+	\item Die Ableitung eines Wortes $w \in L(G), w \neq \lambda$ ist genau $|w|$ Schritte lang wenn G in GNF steht.
+\end{itemize}
+
+\subsection{CS}
+\subsubsection{CS $\to$ LBA}
+Von $G = (\Sigma, N, S, P)$ zu $M = (\Sigma, \Gamma, Z, \delta, z_0, \square, F)$
+\begin{enumerate}
+	\item Eingabe $x = a_1a_2 \dots a_n$.
+	\item Wähle nichtdeterministisch eine Regel $u \to v$ aus $P$ und suche eine beliebiges Vorkommen von $v$ in der aktuellen Bandinschrift von $M$.
+	\item Ersetzt $v$ durch $u$. Ist dabei $|u| < |v|$, so verschiebe entsprechend alle Symbole rechts der Lücke um diese zu schließen.
+	\item Ist die aktuelle Bandinschrift nur noch das Startsymbol $S$, so halte im Endzustand und akzeptiere; andernfalls gehe zu (2) und wiederhole.
+\end{enumerate}
+
+
+ % \subsubsection{Kontextfrei $\to$ PDA}
+ % Von $G = (\Sigma, N, S, P)$ zu $M = (\Sigma, N\cup\Sigma, \{z\}, \delta, z, S)$:
+ % \begin{enumerate}
+ % 	\item Ist $A \to q$ eine Regel in $P$ mit $A \in N$ und $q \in (N \cup \Sigma)^+$, so sei $(z, q) \in \delta(z, \lambda, A)$.
+ % 	\item Für jedes $a \in \Sigma$ sie $(z, \lambda), \in \delta(z, a, a)$.
+ % \end{enumerate}
+
+% \subsubsection{PDA $\to$ Kontextfrei}
+ % Von $M = (\Sigma, \Gamma, Z, \delta, z_0, \#)$ zu $G = (\Sigma, \{S\} \cup Z \times \Gamma \times Z, S, P)$:\\
+ % O.B.d.A Für alle $\delta$-Regeln der Form $zaA \to z'B_1B_2\dots B_k$ gelte $k \le 2$.
+ % P besteht dann aus den folgenden Regeln:
+ % \begin{enumerate}
+ % 	\item $S \to (z_0, \#, z)$ für jedes $z \in Z$.
+ % 	\item $(z, A, z') \to a$, falls $(z', \lambda) \ in \delta(z, a, A)$.
+ % 	\item $(z, A, z') \to a(z_1, B, z')$ falls $(z_1), B) \in \delta(z, a, A)$.
+ % 	\item $z, A, z') \to a(z_1, B, z_2)(z_2, C, z')$, falls $z_1, BC) \in \delta(z, a, A)$.
+ % \end{enumerate}
+ % Wobei $z, z', z_1, z_2 \in Z, A, B, C \in \Gamma$ und $a \in \Sigma \cup \{\lambda\}$.
+
+% \subsubsection{CS $\to$ LBA}
+% Von $G = (\Sigma, N, S, P)$ zu $M = (\Sigma, \Gamma, Z, \delta, z_0, \square, F)$
+% \begin{enumerate}
+% 	\item Eingabe $x = a_1a_2 \dots a_n$.
+% 	\item Wähle nichtdeterministisch eine Regel $u \to v$ aus $P$ und suche eine beliebiges Vorkommen von $v$ in der aktuellen Bandinschrift von $M$.
+% 	\item Ersetzt $v$ durch $u$. Ist dabei $|u| < |v|$, so verschiebe entsprechend alle Symbole rechts der Lücke um diese zu schließen.
+% 	\item Ist die aktuelle Bandinschrift nur noch das Startsymbol $S$, so halte im Endzustand und akzeptiere; andernfalls gehe zu (2) und wiederhole.
+% \end{enumerate}
+% \subsubsection{LBA $\to$ CS}
+
+\subsection{TM}
+\subsubsection{LBA $\to$ CS, TM $\to \mathcal{L}_0$}
+Von $M = (\Sigma, \Gamma, Z, \delta, z_0, \square, F)$ und $G= (\Sigma, \{S, A\} \cup \{\Delta \times\ \Sigma\}, S, P)$ mit
+$$\Delta = \Gamma \cup (Z \times \Gamma)$$ \\
+Variablen:
+\begin{itemize}
+    \item Alphabet ist Eingabe-Alphabet $\Sigma$
+    \item Nichtterminale sind Bandsymbole ohne Eingabe-Alphabet $\Gamma-\Sigma$ 
+    \item Nehme $\#$ als $\square$, ein Symbol $q_i$ für jeden Zustand der TM und $\$$ um Startposition zu merken
+    \item S als Startsymbol und A als initialization
+\end{itemize}
+Übergänge:
+\begin{itemize}
+    \item Setup
+        \begin{itemize}
+            \item $S \to \#S|S\#|\$A$ als Startzustand
+            \item $A \to sA|As|q_f$ für alle $s \in \Gamma$
+        \end{itemize}
+    \item $\delta(g_i, a) = (q_j, b, R)$ wird zu $bq_j \to q_ia$
+    \item $\delta(q_i, a) = (q_j, b, L)$ wird zu $q_jcb \to cq_ia$ für alle $c\in Gamma$
+    \item Cleanup
+        \begin{itemize}
+            \item $\# \to \lambda$
+            \item $\$q_0 \to \lambda$
+        \end{itemize}
+\end{itemize}
+
+Von $M = (\Sigma, \Gamma, Z, \delta, z_0, \square, F)$ und $G= (\Sigma, \{S, A\} \cup \{\Delta \times\ \Sigma\}, S, P)$ mit
+$$\Delta = \Gamma \cup (Z \times \Gamma)$$
+\subsubsection{$\mathcal{L_0} \to$ TM}
+\begin{enumerate}
+	\item Eingabe $x = a_1a_2 \dots a_n$.
+	\item Wähle nichtdeterministisch eine Regel $u \to v$ aus $P$ und suche eine beliebiges Vorkommen von $v$ in der aktuellen Bandinschrift von $M$.
+	\item Ersetzt $v$ durch $u$. Ist dabei $|u| < |v|$, so verschiebe entsprechend alle Symbole rechts der Lücke um diese zu schließen.
+	\item Ist die aktuelle Bandinschrift nur noch das Startsymbol $S$, so halte im Endzustand und akzeptiere; andernfalls gehe zu (2) und wiederhole.
+\end{enumerate}
+
+\section{Definitionen}
+\subsection{Begriffe}
+\begin{itemize}
+	\item Ein Alphabet ist eine endliche, nichtleere Menge $\Sigma$ von Buchstaben  (oder Symbolen).
+	\item Ein Wort über $\Sigma$ ist eine endliche Folge von Elementen aus $\sum$.
+	\item Die Länge eines Wortes w (bezeichnet mit $|w|$) ist die Anzahl der Symbole in w.
+	\item Das leere Wort ist das eindeutig bestimmte Wort der Länge 0 und wird mit dem griechischen Buchstaben $\lambda$ bezeichnet.
+	\item Die Menge aller Wörter über $\Sigma$ bezeichnen wir mit $\Sigma^*$.
+	\item Eine formale Sprache über $\Sigma$ ist eine jede Teilmenge von $\Sigma^*$
+	\item Die leere Sprache ist die Sprache die keine Wörter enthält, und wird mit $\emptyset$ bezeichnet.
+	\item die Kardinalität einer Sprache L ist die Anzahl der Wörter von L und wird mit $\|L\|$ bezeichnet.
+\end{itemize}
+\subsection{Operationen}
+\begin{itemize}
+	\item Vereinigung $\{1, 2\} \cup \{2, 3\} = \{1, 2, 3\}$.
+	\item Durchschnitt $\{1, 2\} \cap \{2, 3\} = \{2\}$.
+	\item Differenz $A - B = \{x \in A \text{ und } x \notin B\}$.
+	\item Komplement $\overline{A} = \{x \in \Sigma^*|x\notin B\}$.
+	\item Konkatenation von Wörtern
+	\begin{itemize}
+		\item Ist $u = v = \lambda$, so ist $uv = vu = \lambda$.
+		\item Ist $v = \Lambda$, so ist $uv = u$.
+		\item Ist $u = \lambda$ so ist $uv = v$.
+		\item Ist $u = u_1 u_2 \dots u_n$ und $v = v_1 v_2 \dots v_m $ mit $u_i , v_i \in \Sigma$, so ist
+		$$uv = u_1 u_2 \dots u_n v_1 v_2 \dots \varepsilon_m.$$
+	\end{itemize}
+	\item Konkatenation von Sprachen:
+	$AB = \{ab|a\in A \ und\ b \in B\}.$
+	\item Iteration einer Sprache:
+	$A^0 = \{\lambda\},\ A^n = AA^{n-1},\ A^* = \bigcup_{n\geq 0}A^n$.
+	\item Spiegelbildoperation von Wort $sp(u)=u_n \dot u_2 u_1$.
+	\item Spiegelbildoperation von Sprache $sp(A)=\{sp(w)|w \in A\}$.
+	\item Teilwortrelation auf $\Sigma^*$: 
+	 $u \sqsupseteq v \leftrightarrow (\exists v_1, v_2 \in \Sigma^*)[v_1 u v_2 = v]$.
+	 \item Anfangswortrelation auf $\Sigma^*$:
+	 $ u \sqsupseteq_a v \leftrightarrow (\exists w \in \Sigma^*)[uw = v]$.
+\end{itemize}
+\subsection{Symbole}
+\begin{itemize}
+	\item $\Sigma$ ein Alphabet von Terminalsymbolen
+	\item $N$ eine Endliche Menge von Nichtterminalen, $\Sigma \cap N = \emptyset$
+	\item S Startsymbol, $S \in N$
+	\item P Produktionsregeln, $P \subseteq (N \cup \Sigma)^+ \times (N \cup \Sigma)^*$
+\end{itemize}
+\subsection{Grammatik}
+$G = (\Sigma, N, S, P)$
+\begin{itemize}
+	\item Typ-0: Ohne Einschränkungen.
+	\item Typ-1: $\forall p \rightarrow q \in P : |p| \leq |q|$ 
+	\item Typ-2: $\forall p \rightarrow q \in P : p \in N$ 
+	\item Typ-3: $\forall p \rightarrow q \in P : |p| \in N \ und\ q \in \Sigma \cup \Sigma N$ 
+\end{itemize}
+$REG \subseteq CF \subseteq CS \subseteq \mathcal{L}_0$
+\subsection{Sonderregelung für $\lambda$}
+Typ-i Grammatiken mit $i\in \{1, 2, 3\}$ sind nichtverkürzend, daher $\lambda \notin L(G)$. Daher folgende Sonderregelung:
+\begin{enumerate}
+	\item Die Regel $S \rightarrow \lambda$ ist als einzige verkürzende Regel für Grammatiken vom Typ 1, 2, 3 zugelassen.
+	\item Tritt die Regel $S \rightarrow \lambda$ auf, so darf $S$ auf keiner rechten Seite einer Regel vorkommen.
+\end{enumerate}
+Dies kann für alle Fälle mit folgender Umwandlung erreicht werden:
+\begin{enumerate}
+	\item In allen Regeln der Form $S \rightarrow u$ aus $P$ mit $u \in (N \cup \Sigma)^*$ wird jedes Vorkommen von $S$ in $u$ durch ein neues Nichtterminal $S'$ ersetzt.
+	\item Zusätzlich enthält $P'$ alle Regeln aus $P$, mit $S$ ersetzt durch $S'$.
+	\item Die Regel $S \rightarrow \lambda$ wird hinzugefügt.
+\end{enumerate}
+
+\subsection{Abschlusseigenschaften}
+\begin{enumerate}
+	\item Vereinigung, falls $(\forall A, B \subseteq \Sigma^*)[(A \in \mathcal{C} \wedge B \in \mathcal{ C}) \implies A \cup B \in \mathcal{C}]$;
+	\item Komplement, falls $(\forall A \subseteq \Sigma^*)[A \in \mathcal{C} \implies \overline{A}\in\mathcal{C}]$;
+	\item Schnitt, falls $(\forall A, B \subseteq \Sigma^*)[(A \in \mathcal{C} \wedge B \in \mathcal{C}) \implies A \cap B \in \mathcal{C}]$;
+	\item Differenz, falls $(\forall A, B \subseteq \Sigma^*)[(A \in \mathcal{C} \wedge B \in C) \implies A \cap B \in \mathcal{C}]$;
+	\item Konkatenation, falls $(\forall A, B \subseteq \Sigma^*)[(A \in \mathcal{C} \wedge B \in \mathcal{C})\implies AB \in \mathcal{C}]$;
+	\item Iteration (Kleene-Hülle), falls $(\forall A \subseteq \Sigma^*)[A\in\mathcal{C}\implies A^*\in\mathcal{C}]$;
+	\item Spiegelung, falls $(\forall A\subseteq \Sigma^*)[A\in\mathcal{C}\implies sp(A)\in\mathcal{C}]$;
+\end{enumerate}
+
+\subsection{DFA}
+\begin{itemize}
+	\item $\Sigma$: Alphabet
+	\item $Z$: endliche Menge von Zuständen mit $\Sigma \cap Z = \emptyset$
+	\item $\delta: Z \times \Sigma \rightarrow Z$ Überführungsfunktion
+	\item $z_0 \in Z$ Startzustand
+	\item $F \subseteq Z$ Endzustände
+\end{itemize}
+\subsection{NFA}
+$M=(\Sigma, Z, \delta, S, F)$
+\begin{itemize}
+	\item $\Sigma$: Alphabet
+	\item $Z$: endliche Menge von Zuständen mit $\Sigma \cap Z = \emptyset$
+	\item $\delta: Z \times \Sigma \rightarrow \mathcal{P}(Z)$: Überführungsfunktionen zur Potenzmenge von Z
+	\item $S \subseteq Z$: Menge der Startzustände
+	\item $F \subseteq Z$ Menge der Endzustände
+\end{itemize}
+\subsection{Regex}
+\begin{itemize}
+	\item $\emptyset\ und\ \lambda\ sind\ regul\ddot{a}re\ Ausdr\ddot{u}cke$
+	\item $Jedes\ a \in \Sigma\ ist\ ein\ regul\ddot{a}rer\ Ausdruck.$
+	\item $Sind\ \alpha\ und\ \beta\ regul\ddot{a}re\ Ausdr\ddot{u}cke,\ so\ sind\ auch$
+	  	\begin{itemize}
+			\item $\alpha\beta$
+			\item $(\alpha + \beta)\ und$
+			\item $(\alpha)^*$
+		\end{itemize}
+		$regul\ddot{a}re Ausdr\ddot{u}cke$
+	\item $Nichts\ sonst\ ist\ ein\ regul\ddot{a}rer\ Ausdruck$
+\end{itemize}
+
+ \subsection{Kellerautomaten (PDA)}
+ $M = (\Sigma, \Gamma, Z, \delta, z_0, \#)$
+ \begin{itemize}
+ 	\item $\Sigma$: Eingabe-Alphabet
+ 	\item $\Gamma$: Kelleralphabet
+ 	\item Z: endliche Menge von Zuständen
+ 	\item $\delta: Z \times (\Sigma \cup \{\lambda\}) \times \Gamma \to \mathcal{P}_e(Z \times \Gamma^+)$ die Überführungsfunktion, $\mathcal{P}_e(Z \times \Gamma^+)$ ist die Menge aller endlichen Teilmengen von $Z \times \Gamma^+$
+ 	\item $z_0 \in Z$: Startzustand
+ 	\item $\# \in \Gamma$ das Bottom-Symbol im Keller
+ \end{itemize}
+ $\delta$-Übergänge $(z', B_1,B_2 \dots B_k)\in \delta(z, a, A)$ schreiben wir kurz auch $zaA \to z'B_1B_2\dots B_k$
+ \begin{itemize}
+ 	\item Akzeptiert wenn Keller leer
+ 	\item Schritte ohne Lesen eines Eingabesymbols  sind in der Form $z\lambda A \to z'B_1B_2 \dots B_k$ möglich.
+ 	\item Es ist nur ein Startzustand nötig
+ \end{itemize}
+ Sprache:
+ \begin{itemize}
+ 	\item  $\mathcal{k}_m = Z \times \Sigma^* \times \Gamma^*$ ist die Menge aller Konfigurationen von M
+ 	\item ist $k = (z, \alpha, \gamma)$ eine Konfiguration aus $\mathcal{k}_M$, so ist im aktuallen Takt der Rechnung von M:
+ 	\begin{itemize}
+ 		\item $z \in Z$ der aktuelle Zustand von M;
+ 		\item $alpha \in \Sigma^*$ der noch zu lesende Teil des Eingabeworts;
+ 		\item $\gamma \in \Gamma^*$ der aktuelle Kellerinhalt.
+ 	\end{itemize}
+ 	Für jedes Eingabewort $w \in \Sigma^*$ ist $(z_0, w, \#)$ die entsprechende Startkonfiguration von M.
+ 	\item Auf $\mathcal{k}_m$ definieren wir eine binäre Relation $\vdash_m \subseteq \mathcal{k}_M \times \mathcal{k}_M$ wie folgt:
+ 	\begin{itemize}
+ 		\item Für $k, k' \in \mathcal{k}_M$ gilt $k \vdash_m k'$ genau dann, wenn $k'$ aus $k$ durch eine Anwendung von $\delta$ hervorgeht.
+ 	\end{itemize}
+ 	\item $\vdash^*_M$ ist die reflexive und transitive Hülle von $\vdash_M$
+ 	\item Die vom PDA $M$ akzeptierte Sprache ist definiert durch
+ 	$$L(M) = \{w \in \Sigma^*|(z_0, w, \#)\vdash^*_M (z, \lambda, \lambda) \text{ für ein } z \in Z\}$$
+ 	$(z, \lambda, \lambda)$ ist dann eine Endkonfiguration für PDA M.
+ \end{itemize}
+
+\subsection{Deterministiche Kontextfreie Sprache, DCF}
+$M = (\Sigma, \Gamma, Z, \delta, z_0, \#, F)$
+\begin{enumerate}
+	\item $M' = (\Sigma, \Gamma, Z, \delta, z_0, \#)$ ist PDA
+	\item $(\forall a \in \Sigma)(\forall A \in \Gamma)(\forall z \in Z)[\|\delta(z, a, A)\| + \|\delta(z, \lambda, A)\| \le 1]$;
+	\item $F \subseteq Z$ ist eine ausgezeichnete Teilmenge von Endzuständen (M akzeptiert per Endzustand, nicht per leerem Keller)
+\end{enumerate}
+
+\subsection{$\mathcal{L}_0$ Sprachen (Turingmaschinen)}
+$M = (\Sigma, \Gamma, Z, \delta, z_0, \square, F)$\\
+Mit k Bändern:
+\begin{itemize}
+	\item $\Sigma$: Eingabe-Alphabet,
+	\item $\Gamma$: Arbeitsalphabet mit $\Sigma \subseteq \Gamma$,
+	\item $Z$: endliche Menge von Zuständen mit $Z \cap \Gamma = \emptyset$,
+	\item $\delta: Z \times \Gamma^k \to \mathcal{P}(Z \times \Gamma^K \times \{L, R, N\}^k)$: Überführungsfunktion,
+	\item $z_0 \in Z$: Startzustand,
+	\item $\square \in \Gamma - \Sigma$: ,,Blank''-Symbol
+	\item $F \subseteq Z$: Menge der Endzustände
+\end{itemize}
+Spezialfall der deterministischen Turingmaschine mit k Bändern mit k Bändern ergibt sich, wenn $\delta$ von $Z \times \Gamma^k$ nach $Z \times \Gamma^k \times \{L, R, N\}^k$ abbildet. Für $k = 1$ ergibt sich die 1-Band-Turingmaschine die mit TM abgekürzt wird. Jede Turingmaschine kann durch eine TM simuliert werden.
+Statt $(z', b, x)\in \delta(z, a)$ mit $z, z' \in Z, x \in \{L, R, N\}, a, b \in \Gamma$ schreiben wir kurz: $(z, a) \to (z', b, x)$, oder $za \to z'bx$
+
+\subsubsection{Linear beschränkte Automaten (LBA)}
+\begin{enumerate}
+	\item Verdoppele das Eingabe-Alphabet $\Sigma$ mit $\hat{\Sigma} = \Sigma \cup \{\hat{a}|a \in \Sigma\}$
+	\item Repräsentiere die Eingabe $a_1a_2 \dots a_n \in \Sigma^+$ durch das Wort $a_1a_2 \dots a_{n-1}\hat{a_n}$ über $\hat{\Sigma}$
+		
+\end{enumerate}
+\begin{itemize}
+	\item Eine nichtdeterministische TM $M$ heißt linear beschränkter Automat (kurz LBA), fals für all Konfigurationen $\alpha z \beta$ und
+	\begin{itemize}
+		\item für alle Wörter $x = a_1a_2 \dots a_{n-1}a_-n \in \Sigma^+$ mit
+		$$z_0a_1a_2 \dots a_{n-1}\hat{a_n}\vdash^*_m \alpha z \beta$$
+		gilt: $|\alpha \beta| = n$, und
+		\item für $x = \lambda$ mit $z_0 \square \vdash^*_M \alpha z \beta$ gilt: $\alpha\beta = \square$
+	\end{itemize}
+	\item Die vom LBA $M$ akzeptierte Sprache ist definiert durch
+	$$L(M) = \left\{
+					a_1a_2 \dots a_{n-1}a_n \in \Sigma^* \middle|
+					\begin{split}
+					&z_0a_1a_2 \dots a_{n-1} \hat{a_n} \vdash^*_m \alpha z\beta\\
+					&\text{mit } z \in F \text{ und } \alpha, \beta \in \Gamma^*
+					\end{split}
+		   	\right\}$$
+\end{itemize}
+
+
+
+\section{Sätze}
+
+\subsection{Satz von Parikh}
+
+\subsubsection{Parikh Abbildung}
+$\Psi: LL \to \mathcal{N}^n$ ist definiert durch
+$$\Psi(w) = (|w|_a1, |w|_a2, \dots, |w|_an),$$
+wobei $|w|_a$ die Anzahl der Vorkommen des Zeichens $a$ in $w$ angibt. Für Sprachen:
+$\Psi: \mathcal{P}(\Sigma^*) \to \mathcal{P}(\mathcal{N}^n)$ ist definiert durch
+$$\Psi(L) = \{\Psi(w)|w \in L\}$$
+Eine Menge ist semilinear wenn sie aus linearen Mengen zusammengesetzt ist.
+\subsubsection{Parikh}
+Für jede kontextfreie Sprache $L$ in $\Psi(L)$ ist semilinear
+\subsubsection{Beispiel}
+$$L = \{x \in \{0, 1\}^i | x = 1^k \text{ mit } k \ge 0 \text{ oder }  x = 0^j1^{k^2} mit j \ge 1 \text{ und } k \ge 1\}$$
+über $\Sigma = \{0, ,1\}$. Die Menge
+$$ \Psi(L) = \{(i, j)|(i = 0\text{ und }j \ge 0) \text{ oder } (i \ge 1 \text{ und } j = k^2 \text{ und } k \ge 1)\}$$
+ist nicht semilinear und L somit nicht kontextfrei.
+
+\subsection{Pumping Lemma REG}
+Sei $L \in$ REG. Dann existiert eine (von $L$ abhängige) Zahl $n \geq 1$, so dass sich alle Wörter $x \in L$ mit $|x|\geq n$ zerlegen lassen in $x = uvw$ wobei gilt:
+\begin{enumerate}
+	\item $|uv| \leq n$,
+	\item $|v| \geq 1$,
+	\item $(\forall i \geq 0)[uv^iw \in L]$.
+\end{enumerate}
+
+\subsection{Pumping-Lemma CF}
+Sei $L$ eine kontextfreie Sprache. Dann existiert eine (von L abhängige) Zahl $n \ge 1$, so dass sich alle Wörter $z \in L$ mit $|z| \ge n$ zerlegen lassen in $z = uvwxy$, wobei gilt:
+\begin{enumerate}
+	\item $|vx| \ge 1$.
+	\item $|vwx| \le n$.
+	\item $(\forall i \ge 0)[uv^iwx^iy \in L]$.
+\end{enumerate}
+
+\begin{table}[h]
+	\begin{tabular}{|c||c|}
+		\hline
+	     Typ 3 & \specialcell[t]{reguläre Grammatik\\ deterministhischer endlicher Automat(DFA)\\ nichtdeterministischer endlicher Automat (NFA) \\ regulärer Ausdruck (REG)}\\
+			\hline
+		\specialcell[t]{deterministisch} & \specialcell[t]{LR(1)-Grammatik\\deterministischer Kellerautomat (DPDA)}\\
+			\hline
+		Typ 2 & \specialcell[t]{kontextfreie Grammatik\\ Kellerautomat (PDA)}\\
+			\hline
+		Typ 1 & \specialcell[t]{kontextsensitive Grammatik \\ linear beschränkter Automat (LBA)} \\
+			\hline
+		Typ 0 & \specialcell[t]{Typ-0-Grammatik \\ Turingmaschine (NTM bzw. DTM)}\\
+		\hline
+	\end{tabular}
+\end{table}
+\begin{table}
+    \begin{tabular}{|c|c|c|}
+    	\hline
+    	Deterministischer Automat & Nichtdeterministischer Automat & äquivalent?\\
+    	\hline\hline
+    	DFA & NFA & ja\\
+    	\hline
+    	DPDA & PDA & nein\\
+    	\hline
+    	DLBA & LBA & ?\\
+    	\hline
+    	DTM & NTM & ja\\
+    	\hline
+    \end{tabular}
+\end{table}
+\begin{table}
+	\begin{tabular}{|c|c|c|c|c|c|}
+		\hline
+		&Typ 3& det.kf.&Typ2 & Typ 1 & Typ 0\\
+		\hline\hline
+		Schnitt & ja & nein & nein & ja & ja\\
+		\hline
+		Vereinigung & ja & nein & ja & ja & ja\\
+		\hline
+		Komplement & ja & ja & nein & ja & nein\\
+		\hline
+		Konkatenation & ja & nein & ja & ja & ja\\
+		\hline
+		Iteration & ja & nein & ja & ja & ja\\
+		\hline
+		Spiegelung & ja & nein & ja & ja & ja\\
+		\hline
+	\end{tabular}
+\end{table}
+Wortproblem:
+$$\text{Wort}_i = \{(G, X)|G \text{ist Typ-i-Grammatik und }x \in L(G)\}$$
+\begin{table}
+	\begin{tabular}[h]{|l|l|}
+		\hline
+		Typ 3 (DFA gegeben) & lineare Komplexität\\
+		\hline
+		det. kf. & lineare Komplexität\\
+		\hline
+        Typ 2 (CNF gegeben) & Komplexität $\mathcal{O}(n^3)$ (CYK-Algorithmus)\\
+		\hline
+		Typ 1 & exponentielle Komplexität\\
+		\hline
+		Typ 0 & unentscheidbar (d.h. algorithmisch nicht lösbar)\\
+		\hline
+	\end{tabular}
+\end{table}
+
+
+\end{document}
